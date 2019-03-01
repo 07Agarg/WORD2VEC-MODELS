@@ -11,7 +11,6 @@ import data
 import model
 import utils
 import os
-import tensorflow as tf
 
 if __name__ == "__main__":
     # LOAD DATA

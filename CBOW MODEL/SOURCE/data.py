@@ -6,27 +6,24 @@ Created on Sun Jul 22 07:06:16 2018
 """
 import config
 import os
-import pandas as pd
 import numpy as np
 import collections 
 import zipfile
-import random
 from six.moves.urllib.request import urlretrieve
 
 class DATA():
 
-    def __init__(self, CONFIG):
-        self.config = CONFIG
+    def __init__(self):
         self.batch = None
         self.data = None
         self.size = None
         self.dictionary = None
         self.count = None
-        self.revers_dictionary = None
-        self.num_skips = config.NUM_SKIP
+        self.reverse_dictionary = None
+        self.num_skips = config.NUM_SKIPS
         self.skip_window = config.SKIP_WINDOW
         self.data_index = 0
-        self.batch_size = self.config.BATCH_SIZE
+        self.batch_size = config.BATCH_SIZE
         self.vocab_size = config.VOCABULARY_SIZE
 
     def maybe_download(filename, expected_bytes):
@@ -41,7 +38,7 @@ class DATA():
         return filename
     
     def read_data(self, filename):
-        with zipfile.Zipfile(filename) as f:
+        with zipfile.ZipFile(filename) as f:
             data = f.read(f.namelist()[0]).decode('utf-8').split()
         return data
     
@@ -60,7 +57,7 @@ class DATA():
                 unk_count += 1
             self.data.append(index)
         self.count[0][1] = unk_count
-        self.reversed_dictionary = dict(zip(self.dictionary.values(), self.dictionary.keys()))
+        self.reverse_dictionary = dict(zip(self.dictionary.values(), self.dictionary.keys()))
     
     def generate_batch(self):
         span = 2 * self.skip_window + 1

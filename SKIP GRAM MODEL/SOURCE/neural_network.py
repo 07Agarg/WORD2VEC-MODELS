@@ -7,6 +7,7 @@ Created on Sun Jul 22 07:06:16 2018
 
 import tensorflow as tf
 import config
+import math
 
 class Embedding_Layer():
     
@@ -21,9 +22,9 @@ class Embedding_Layer():
 class NCE_Layer():
     
     def __init__(self, shape):
-        self.weights = tf.Variable(tf.truncated_normal([config.VOCABULARY_SIZE, config.EMBEDDING_SIZE]), stddev = 1.0/math.sqrt(shape[1]))
+        self.weights = tf.Variable(tf.truncated_normal([config.VOCABULARY_SIZE, config.EMBEDDING_SIZE], stddev = 1.0/math.sqrt(shape[1])))
         self.bias = tf.Variable(tf.zeros(shape = shape[0]))
         
     def loss(self, input_data, labels):
-        loss = tf.reduce_mean(tf.nn.nce_loss(self.weights, self.biases, labels, input_data, num_sampled = config.NUM_SAMPLED, num_classes = config.VOCABULARY_SIZE))
+        loss = tf.reduce_mean(tf.nn.nce_loss(self.weights, self.bias, labels, input_data, num_sampled = config.NUM_SAMPLED, num_classes = config.VOCABULARY_SIZE))
         return loss

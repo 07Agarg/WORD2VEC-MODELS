@@ -3,19 +3,18 @@
 Created on Fri Jun  8 20:43:05 2018
 
 @author: ashima.garg
-
 """
 
 import config
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
-import data
 import os
 
-def plot_with_labels(embeddings, labels):
-    low_dim_embs = tsne(embeddings)
+def plot_with_labels(embeddings, data):
     plt.figure(figsize=(18, 18))  # in inches
-    labels = [data.reverse_dictionary[i] for i in range(plot_only = 500)]
+    plot_only = 500
+    low_dim_embs = tsne(embeddings[:plot_only, :])
+    labels = [data.reverse_dictionary[i] for i in range(plot_only)]
     for i, label in enumerate(labels):
         x, y = low_dim_embs[i, :]
         plt.scatter(x, y)
@@ -25,6 +24,5 @@ def plot_with_labels(embeddings, labels):
 
 def tsne(embeddings):
     tsne = TSNE(perplexity=30, n_components=2, init='pca', n_iter=5000, method='exact')
-    plot_only = 500
-    low_dim_embs = tsne.fit_transform(embeddings[:plot_only, :])
+    low_dim_embs = tsne.fit_transform(embeddings)
     return low_dim_embs
